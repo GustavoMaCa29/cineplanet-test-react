@@ -1,49 +1,19 @@
-// 🔹 Contenedor del slider
-.slick-slider {
-    width: 100%;
-    margin: auto;
-  }
-  
-  // 🔹 Flechas de navegación
-  .slick-prev, .slick-next {
-    font-size: 24px;
-    z-index: 10;
-  }
-  
-  // 🔹 Personalizar las flechas
-  .slick-prev::before,
-  .slick-next::before {
-    color: #ff6600; // Cambia el color de las flechas
-    font-size: 30px;
-  }
-  
-  // 🔹 Personalizar los puntos
-  .slick-dots li button:before {
-    color: #fff; // Color normal
-    font-size: 12px;
-  }
-  
-  .slick-dots li.slick-active button:before {
-    color: #ff6600; // Color cuando está activo
-  }
-  
-  // 🔹 Estilo de las películas
-  .movieCard {
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-  
-    &:hover {
-      filter: brightness(0.8); // ✅ Oscurece un poco la imagen al pasar el mouse
-      transform: scale(1.05);
-    }
-  }
-  
-  .movieImage {
-    height: 350px;
-    object-fit: cover;
-  }
+.movieCard {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease;
 
-  .movieCard:hover .movieOverlay {
-    opacity: 1;
+  &:hover {
+    filter: brightness(0.8);
+    transform: scale(1.05);
   }
+}
+
+.movieImage {
+  height: 350px;
+  object-fit: cover;
+}
+
+.movieCard:hover .movieOverlay {
+  opacity: 1;
+}

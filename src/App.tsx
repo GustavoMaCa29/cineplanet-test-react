@@ -9,11 +9,10 @@ import NavigationBar from "./components/NavigationBar";
 import Footer from "./components/Footer";
 import "bootstrap/dist/css/bootstrap.min.css";
 
-// Lazy loaded pages
-const Home = lazy(() => import("./pages/Home"));
-const CandyStore = lazy(() => import("./pages/CandyStore"));
-const Login = lazy(() => import("./pages/Login"));
-const Payment = lazy(() => import("./pages/Payment"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const CandyStore = lazy(() => import("./pages/CandyStore/CandyStore"));
+const Login = lazy(() => import("./pages/Login/Login"));
+const Payment = lazy(() => import("./pages/Payment/Payment"));
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const location = useLocation();

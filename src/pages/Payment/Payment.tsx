@@ -6,7 +6,6 @@ import { useNavigate } from "react-router-dom";
 const PaymentForm: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-
   const [formData, setFormData] = useState({
     cardNumber: "",
     expiration: "",
@@ -41,13 +40,19 @@ const PaymentForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-  
+
+    if (!formData.cardNumber || !formData.cvv || !formData.documentNumber) {
+      Swal.fire("Error", "Por favor, complete todos los campos requeridos", "error");
+      setLoading(false);
+      return;
+    }
+
     try {
-      const paymentResponse = await axios.post("http://localhost:8080/api/payment/payu", formData);
-  
+      const paymentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/payu`, formData);
+
       if (paymentResponse.data && paymentResponse.data.code === "SUCCESS") {
         const { transactionId, operationDate } = paymentResponse.data.transactionResponse;
-  
+
         const completePayload = {
           email: formData.email,
           name: formData.name,
@@ -55,9 +60,9 @@ const PaymentForm: React.FC = () => {
           transactionId,
           operationDate,
         };
-  
-        const completeResponse = await axios.post("http://localhost:8080/api/payment/complete", completePayload);
-  
+
+        const completeResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/complete`, completePayload);
+
         if (completeResponse.data.code === "0") {
           Swal.fire("¡Compra completada!", "Gracias por tu compra.", "success");
           localStorage.removeItem("candyCart");
@@ -78,7 +83,6 @@ const PaymentForm: React.FC = () => {
 
   return (
     <div className="container py-5">
-
       <div className="row justify-content-center">
         <div className="col-12 col-md-3"></div>
 
@@ -87,30 +91,74 @@ const PaymentForm: React.FC = () => {
           <form onSubmit={handleSubmit} className="bg-light p-5 shadow-sm">
             <div className="mb-3">
               <label className="form-label">Nombre completo</label>
-              <input type="text" name="name" value={formData.name} className="form-control" required onChange={handleChange} />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                className="form-control"
+                required
+                onChange={handleChange}
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Correo electrónico</label>
-              <input type="email" name="email" value={formData.email} className="form-control" required onChange={handleChange} />
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                className="form-control"
+                required
+                onChange={handleChange}
+              />
             </div>
             <div className="mb-3">
               <label className="form-label">Número de tarjeta</label>
-              <input type="text" name="cardNumber" maxLength={16} value={formData.cardNumber} className="form-control" required onChange={handleChange} />
+              <input
+                type="text"
+                name="cardNumber"
+                maxLength={16}
+                value={formData.cardNumber}
+                className="form-control"
+                required
+                onChange={handleChange}
+              />
             </div>
             <div className="row">
               <div className="col-md-6 mb-3">
                 <label className="form-label">Fecha de expiración</label>
-                <input type="text" name="expiration" value={formData.expiration} className="form-control" placeholder="YYYY/MM" required onChange={handleChange} />
+                <input
+                  type="text"
+                  name="expiration"
+                  value={formData.expiration}
+                  className="form-control"
+                  placeholder="YYYY/MM"
+                  required
+                  onChange={handleChange}
+                />
               </div>
               <div className="col-md-6 mb-3">
                 <label className="form-label">CVV</label>
-                <input type="text" name="cvv" maxLength={4} value={formData.cvv} className="form-control" placeholder="YYY" required onChange={handleChange} />
+                <input
+                  type="text"
+                  name="cvv"
+                  maxLength={4}
+                  value={formData.cvv}
+                  className="form-control"
+                  placeholder="YYY"
+                  required
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <div className="row">
               <div className="col-md-4 mb-3">
                 <label className="form-label">Tipo de documento</label>
-                <select name="documentType" className="form-select" value={formData.documentType} onChange={handleChange}>
+                <select
+                  name="documentType"
+                  className="form-select"
+                  value={formData.documentType}
+                  onChange={handleChange}
+                >
                   <option value="DNI">DNI</option>
                   <option value="CE">CE</option>
                   <option value="PAS">PAS</option>
@@ -118,7 +166,15 @@ const PaymentForm: React.FC = () => {
               </div>
               <div className="col-md-8 mb-3">
                 <label className="form-label">Número de documento</label>
-                <input type="text" name="documentNumber" maxLength={8} value={formData.documentNumber} className="form-control" required onChange={handleChange} />
+                <input
+                  type="text"
+                  name="documentNumber"
+                  maxLength={8}
+                  value={formData.documentNumber}
+                  className="form-control"
+                  required
+                  onChange={handleChange}
+                />
               </div>
             </div>
             <button type="submit" className="btn btn-success w-100 mt-5" disabled={loading}>
