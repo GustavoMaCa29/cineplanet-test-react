@@ -1,7 +1,8 @@
+// src/components/PaymentForm.tsx
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { initiatePayment, completePayment } from "../../api/paymentApi";
 
 const PaymentForm: React.FC = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const PaymentForm: React.FC = () => {
     documentNumber: "",
     amount: 5.0,
   });
-  
+
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -48,10 +49,10 @@ const PaymentForm: React.FC = () => {
     }
 
     try {
-      const paymentResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/payu`, formData);
+      const paymentResponse = await initiatePayment(formData);
 
-      if (paymentResponse.data && paymentResponse.data.code === "SUCCESS") {
-        const { transactionId, operationDate } = paymentResponse.data.transactionResponse;
+      if (paymentResponse && paymentResponse.code === "SUCCESS") {
+        const { transactionId, operationDate } = paymentResponse.transactionResponse;
 
         const completePayload = {
           email: formData.email,
@@ -61,9 +62,9 @@ const PaymentForm: React.FC = () => {
           operationDate,
         };
 
-        const completeResponse = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/complete`, completePayload);
+        const completeResponse = await completePayment(completePayload);
 
-        if (completeResponse.data.code === "0") {
+        if (completeResponse.code === "0") {
           Swal.fire("¡Compra completada!", "Gracias por tu compra.", "success");
           localStorage.removeItem("candyCart");
           navigate("/");
