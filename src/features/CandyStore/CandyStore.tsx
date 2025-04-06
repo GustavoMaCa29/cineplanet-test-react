@@ -3,24 +3,15 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useCandyCart } from "../../hooks/useCandyCart";
 import { useCandyProducts } from "../../hooks/useCandyProducts";
-import ProductCard from "../../components/ProductCard";
+import ProductCard from "../../shared/components/Card/Card";
+import { useCartStore } from "../../stores/useCartStore";
 
 const CandyStore: React.FC = () => {
   const { products, loading, error } = useCandyProducts();
   const [imageLoaded, setImageLoaded] = useState<{ [id: number]: boolean }>({});
-  const { quantities, increase, decrease } = useCandyCart();
+  const { addToCart, updateQuantity, total, cart } = useCartStore();
   const navigate = useNavigate();
-
-  const selectedProducts = products.filter(
-    (product) => (quantities[product.id] || 0) > 0
-  );
-
-  const total = selectedProducts.reduce(
-    (acc, product) => acc + product.price * (quantities[product.id] || 0),
-    0
-  );
 
   const handleGoToPayment = () => {
     Swal.fire({
@@ -38,13 +29,22 @@ const CandyStore: React.FC = () => {
     });
   };
 
+  const handleAddToCart = (product: { id: number; name: string; price: number }) => {
+    addToCart(product);
+    useCartStore.getState().calculateTotal();
+  };
+
+  const handleUpdateQuantity = (id: number, quantity: number) => {
+    updateQuantity(id, quantity);
+    useCartStore.getState().calculateTotal();
+  };
+
+  const selectedProducts = cart;
+
   return (
     <div className="container-fluid px-0">
       <div className="row g-0" style={{ minHeight: "100vh" }}>
-        <div
-          className="col-12 col-md-8 p-4 overflow-auto"
-          style={{ background: "#f0f0f0" }}
-        >
+        <div className="col-12 col-md-8 p-4 overflow-auto" style={{ background: "#f0f0f0" }}>
           <div className="container">
             <h2 className="mb-4 text-dark fw-bold">Dulcería</h2>
             {error && <p className="text-danger">{error}</p>}
@@ -65,13 +65,11 @@ const CandyStore: React.FC = () => {
                     <ProductCard
                       key={product.id}
                       product={product}
-                      quantity={quantities[product.id] || 0}
-                      onIncrease={increase}
-                      onDecrease={decrease}
+                      quantity={cart.find((item) => item.id === product.id)?.quantity || 0}
+                      onIncrease={() => handleAddToCart(product)}
+                      onDecrease={() => handleUpdateQuantity(product.id, (cart.find((item) => item.id === product.id)?.quantity || 1) - 1)}
                       imageLoaded={imageLoaded[product.id]}
-                      onImageLoad={(id) =>
-                        setImageLoaded((prev) => ({ ...prev, [id]: true }))
-                      }
+                      onImageLoad={(id) => setImageLoaded((prev) => ({ ...prev, [id]: true }))}
                     />
                   ))}
             </div>
@@ -92,16 +90,11 @@ const CandyStore: React.FC = () => {
             <div>
               <ul className="list-group mb-3">
                 {selectedProducts.map((product) => (
-                  <li
-                    key={product.id}
-                    className="list-group-item d-flex justify-content-between"
-                  >
+                  <li key={product.id} className="list-group-item d-flex justify-content-between">
                     <span>
-                      {quantities[product.id]} x {product.name}
+                      {product.quantity} x {product.name}
                     </span>
-                    <strong>
-                      S/{(product.price * quantities[product.id]).toFixed(2)}
-                    </strong>
+                    <strong>S/{(product.price * product.quantity).toFixed(2)}</strong>
                   </li>
                 ))}
               </ul>
@@ -109,7 +102,8 @@ const CandyStore: React.FC = () => {
               <button
                 className="btn w-100 mt-3 text-light rounded"
                 onClick={handleGoToPayment}
-                style={{ background: "#E50246" }}>
+                style={{ background: "#E50246" }}
+              >
                 Ir a pagar
               </button>
             </div>

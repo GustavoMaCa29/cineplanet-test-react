@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { getCandyProducts } from "../api/candyStoreApi";
 
 export const useCandyProducts = () => {
-  const [products, setProducts] = useState<CandyProduct[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 

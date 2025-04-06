@@ -1,7 +1,8 @@
 import React from "react";
+import styles from './Card.module.scss';
 
 interface ProductCardProps {
-  product: CandyProduct;
+  product: Product;
   quantity: number;
   onIncrease: (id: number) => void;
   onDecrease: (id: number) => void;
@@ -20,9 +21,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <div className="col-12 col-sm-6 col-lg-4 mb-4">
       <div className="bg-white text-dark p-3 h-100">
-        <div className="text-center mb-2" style={{ minHeight: "150px" }}>
+        <div className={`${styles.imageContainer} text-center mb-2`}>
           {!imageLoaded && (
-            <div className="d-flex justify-content-center align-items-center" style={{ height: "150px" }}>
+            <div className={`${styles.spinnerContainer} d-flex justify-content-center align-items-center`}>
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Cargando...</span>
               </div>
@@ -31,16 +32,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <img
             src={product.imageUrl}
             alt={product.name}
-            className="img-fluid"
-            style={{
-              maxHeight: "150px",
-              display: imageLoaded ? "block" : "none",
-            }}
+            className={`img-fluid ${styles.productImage}`}
             onLoad={() => onImageLoad(product.id)}
           />
         </div>
 
-        <h5 style={{ color: "#004A8C", fontWeight: "bold", fontFamily: "Montserrat" }}>
+        <h5 className={styles.productTitle}>
           {product.name}
         </h5>
         <p className="small" style={{ fontStyle: "italic" }}>{product.description}</p>
@@ -48,37 +45,21 @@ const ProductCard: React.FC<ProductCardProps> = ({
         <div className="d-flex justify-content-between align-items-center">
           <div>
             <button
-              className="btn btn-outline-secondary rounded-circle"
-              style={{
-                width: "35px",
-                height: "35px",
-                fontSize: "1.2rem",
-                padding: "0",
-                marginRight: "8px",
-              }}
+              className={`${styles.btnDecrement} btn btn-outline-secondary rounded-circle`}
               onClick={() => onDecrease(product.id)}
-              disabled={!quantity}
-            >
+              disabled={!quantity}>
               -
             </button>
-            <span className="mx-2" style={{ color: "#004A8C", fontWeight: "bold" }}>
+            <span className={styles.quantity}>
               {quantity}
             </span>
             <button
-              className="btn btn-outline-primary rounded-circle"
-              style={{
-                width: "35px",
-                height: "35px",
-                fontSize: "1.2rem",
-                padding: "0",
-                marginLeft: "8px",
-              }}
-              onClick={() => onIncrease(product.id)}
-            >
+              className={`${styles.btnIncrement} btn btn-outline-secondary rounded-circle`}
+              onClick={() => onIncrease(product.id)}>
               +
             </button>
           </div>
-          <span className="fw-bold" style={{ color: "#004A8C" }}>
+          <span className={`${styles.productPrice} fw-bold`}>
             S/{product.price.toFixed(2)}
           </span>
         </div>

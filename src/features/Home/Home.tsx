@@ -1,7 +1,9 @@
 import React from "react";
 import { usePremieres } from "../../hooks/usePremieres";
-import FeaturedCarousel from "../../components/FeaturedCarousel";
-import Carousel from "../../components/Carousel/Carousel";
+import FeaturedCarousel from "../../shared/components/Slider/Slider";
+import Carousel from "../../shared/components/Carousel/Carousel";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const Home: React.FC = () => {
   const { premieres, loading, error } = usePremieres();
@@ -17,10 +19,11 @@ const Home: React.FC = () => {
           <div className="row">
             {[...Array(4)].map((_, i) => (
               <div key={i} className="col-md-3 col-sm-6 mb-4">
-                <div className="bg-light h-100 d-flex justify-content-center align-items-center">
-                  <div className="spinner-border text-primary" role="status">
-                    <span className="visually-hidden">Cargando...</span>
-                  </div>
+                <div className="bg-white p-3 h-100">
+                  <Skeleton height={150} className="mb-2" />
+                  <Skeleton height={20} width="80%" />
+                  <Skeleton height={15} width="60%" className="mb-2" />
+                  <Skeleton height={30} width="100%" />
                 </div>
               </div>
             ))}

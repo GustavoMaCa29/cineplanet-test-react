@@ -1,0 +1,44 @@
+.cardBody {
+  padding: 1rem;
+}
+
+.imageContainer {
+  min-height: 150px;
+}
+
+.spinnerContainer {
+  height: 150px;
+}
+
+.productImage {
+  max-height: 150px;
+  display: block;
+}
+
+.productTitle {
+  color: #004a8c;
+  font-weight: bold;
+  font-family: "Montserrat", sans-serif;
+}
+
+.productDescription {
+  font-style: italic;
+}
+
+.quantity {
+  color: #004a8c;
+  font-weight: bold;
+  margin: 15px;
+}
+
+.productPrice {
+  color: #004a8c;
+}
+
+.btnDecrement, .btnIncrement {
+  width: 35px;
+  height: 35px;
+  font-size: 1.2rem;
+  padding: 0;
+  border: 3px solid #004a8c;
+}

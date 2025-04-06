@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Navbar, Nav, Button } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
-import { auth, signOut } from "../config/firebaseConfig";
+import { auth, signOut } from "../../../config/firebaseConfig";
 import { User, onAuthStateChanged } from "firebase/auth";
 
 const NavigationBar: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
-  const navigate = useNavigate(); // ✅ Para redirigir
+  const navigate = useNavigate();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {

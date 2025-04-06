@@ -1,11 +1,12 @@
-// src/components/PaymentForm.tsx
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { initiatePayment, completePayment } from "../../api/paymentApi";
+import { useCartStore } from "../../stores/useCartStore";
 
 const PaymentForm: React.FC = () => {
   const navigate = useNavigate();
+  const { total } = useCartStore();
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     cardNumber: "",
@@ -15,7 +16,7 @@ const PaymentForm: React.FC = () => {
     name: "",
     documentType: "DNI",
     documentNumber: "",
-    amount: 5.0,
+    amount: total,
   });
 
   useEffect(() => {
@@ -65,9 +66,10 @@ const PaymentForm: React.FC = () => {
         const completeResponse = await completePayment(completePayload);
 
         if (completeResponse.code === "0") {
-          Swal.fire("¡Compra completada!", "Gracias por tu compra.", "success");
-          localStorage.removeItem("candyCart");
-          navigate("/");
+          Swal.fire("¡Compra completada!", "Gracias por tu compra.", "success").then(() => {
+            // Redirigir después de que el usuario haga clic en "OK"
+            navigate("/");
+          });
         } else {
           Swal.fire("Error", "Error al completar la transacción.", "error");
         }
