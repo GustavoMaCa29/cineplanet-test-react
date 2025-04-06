@@ -41,6 +41,9 @@ const CandyStore: React.FC = () => {
 
   const selectedProducts = cart;
 
+  const validProducts = selectedProducts.filter((product) => product.price * product.quantity > 0);
+
+
   return (
     <div className="container-fluid px-0">
       <div className="row g-0" style={{ minHeight: "100vh" }}>
@@ -84,12 +87,12 @@ const CandyStore: React.FC = () => {
               <Skeleton height={30} count={3} className="mb-2" />
               <Skeleton height={40} width="50%" />
             </div>
-          ) : selectedProducts.length === 0 ? (
+          ) : selectedProducts.length === 0 || total === 0  ? (
             <p className="text-center">No hay productos seleccionados.</p>
           ) : (
             <div>
               <ul className="list-group mb-3">
-                {selectedProducts.map((product) => (
+                {validProducts.map((product) => (
                   <li key={product.id} className="list-group-item d-flex justify-content-between">
                     <span>
                       {product.quantity} x {product.name}
