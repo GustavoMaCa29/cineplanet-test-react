@@ -1,6 +1,6 @@
 import React from "react";
 import { usePremieres } from "../../hooks/usePremieres";
-import FeaturedCarousel from "../../shared/components/Slider/Slider";
+import Slider from "../../shared/components/Slider/Slider";
 import Carousel from "../../shared/components/Carousel/Carousel";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
@@ -10,7 +10,7 @@ const Home: React.FC = () => {
 
   return (
     <div className="home-container">
-      <FeaturedCarousel />
+      <Slider />
 
       <div className="container">
         <h2 className="mb-4 fw-bold">EN CARTELERA</h2>

@@ -2,7 +2,7 @@ import React from "react";
 import { Carousel as BootstrapCarousel } from "react-bootstrap";
 import styles from "./Slider.module.scss";
 
-const FeaturedCarousel: React.FC = () => {
+const Slider: React.FC = () => {
   return (
     <BootstrapCarousel className="mb-5">
       <BootstrapCarousel.Item className={styles["carousel-item"]}>
@@ -30,4 +30,4 @@ const FeaturedCarousel: React.FC = () => {
   );
 };
 
-export default FeaturedCarousel;
+export default Slider;

@@ -43,7 +43,6 @@ const CandyStore: React.FC = () => {
 
   const validProducts = selectedProducts.filter((product) => product.price * product.quantity > 0);
 
-
   return (
     <div className="container-fluid px-0">
       <div className="row g-0" style={{ minHeight: "100vh" }}>
