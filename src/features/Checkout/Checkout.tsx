@@ -51,6 +51,24 @@ const PaymentForm: React.FC = () => {
       return;
     }
 
+    if (!/^\d{16}$/.test(cardNumber)) {
+      Swal.fire("Error", "El número de tarjeta debe contener solo números y tener 16 dígitos", "error");
+      setLoading(false);
+      return;
+    }
+
+    if (!/^\d+$/.test(documentNumber)) {
+      Swal.fire("Error", "El número de documento debe contener solo números", "error");
+      setLoading(false);
+      return;
+    }
+
+    if (!cardNumber || !cvv || !documentNumber) {
+      Swal.fire("Error", "Por favor, complete todos los campos requeridos", "error");
+      setLoading(false);
+      return;
+    }
+
     const expirationRegex = /^\d{4}\/\d{2}$/;
     if (!expirationRegex.test(expiration)) {
       Swal.fire("Error", "La fecha de expiración debe tener el formato YYYY/MM", "error");
