@@ -43,8 +43,35 @@ const PaymentForm: React.FC = () => {
     e.preventDefault();
     setLoading(true);
 
-    if (!formData.cardNumber || !formData.cvv || !formData.documentNumber) {
+    const { cardNumber, cvv, documentNumber, expiration } = formData;
+
+    if (!cardNumber || !cvv || !documentNumber) {
       Swal.fire("Error", "Por favor, complete todos los campos requeridos", "error");
+      setLoading(false);
+      return;
+    }
+
+    const expirationRegex = /^\d{4}\/\d{2}$/;
+    if (!expirationRegex.test(expiration)) {
+      Swal.fire("Error", "La fecha de expiración debe tener el formato YYYY/MM", "error");
+      setLoading(false);
+      return;
+    }
+
+    const [yearStr, monthStr] = expiration.split("/");
+    const year = parseInt(yearStr, 10);
+    const month = parseInt(monthStr, 10);
+    const now = new Date();
+    const expirationDate = new Date(year, month - 1);
+
+    if (
+      isNaN(year) ||
+      isNaN(month) ||
+      month < 1 ||
+      month > 12 ||
+      expirationDate < new Date(now.getFullYear(), now.getMonth())
+    ) {
+      Swal.fire("Error", "La fecha de expiración no es válida o ya está vencida", "error");
       setLoading(false);
       return;
     }
@@ -67,7 +94,6 @@ const PaymentForm: React.FC = () => {
 
         if (completeResponse.code === "0") {
           Swal.fire("¡Compra completada!", "Gracias por tu compra.", "success").then(() => {
-            // Redirigir después de que el usuario haga clic en "OK"
             navigate("/");
           });
         } else {
@@ -180,14 +206,14 @@ const PaymentForm: React.FC = () => {
                 />
               </div>
             </div>
-            <button type="submit" className="btn btn-success w-100 mt-5" disabled={loading}>
+            <button type="submit" className="btn btn-success w-100 mt-5" disabled={loading || total <= 0}>
               {loading ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />
                   Procesando...
                 </>
               ) : (
-                "Confirmar Pago"
+                `Confirmar pago de S/${total.toFixed(2)} soles`
               )}
             </button>
           </form>

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useNavigate } from "react-router-dom";
-import Swal from "sweetalert2";
 import { useCandyProducts } from "../../hooks/useCandyProducts";
 import ProductCard from "../../shared/components/Card/Card";
 import { useCartStore } from "../../stores/useCartStore";
@@ -14,19 +13,7 @@ const CandyStore: React.FC = () => {
   const navigate = useNavigate();
 
   const handleGoToPayment = () => {
-    Swal.fire({
-      title: "Confirmar pago",
-      text: `El monto total a pagar es S/. ${total.toFixed(2)}`,
-      icon: "info",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonText: "Continuar",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        navigate("/payment");
-      }
-    });
+    navigate("/payment");
   };
 
   const handleAddToCart = (product: { id: number; name: string; price: number }) => {
@@ -100,13 +87,14 @@ const CandyStore: React.FC = () => {
                   </li>
                 ))}
               </ul>
+              <br />
               <h5 className="text-end">Total: S/{total.toFixed(2)}</h5>
               <button
                 className="btn w-100 mt-3 text-light rounded"
                 onClick={handleGoToPayment}
                 style={{ background: "#E50246" }}
               >
-                Ir a pagar
+                Continuar
               </button>
             </div>
           )}
